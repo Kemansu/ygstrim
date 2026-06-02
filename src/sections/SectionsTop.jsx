@@ -42,13 +42,16 @@ export function Header({ onPrice }) {
   }, []);
 
   useEffect(() => {
-    document.body.classList.toggle("no-scroll", open);
-    return () => document.body.classList.remove("no-scroll");
+    // блокируем прокрутку на <html>, а не на <body>:
+    // overflow:hidden на body ломает position:sticky шапки (её отбрасывает наверх)
+    document.documentElement.classList.toggle("no-scroll", open);
+    return () => document.documentElement.classList.remove("no-scroll");
   }, [open]);
 
   return (
-    <header className={`hdr ${scrolled ? "hdr--solid" : ""}`}>
-      <div className="container hdr__row">
+    <>
+      <header className={`hdr ${scrolled ? "hdr--solid" : ""}`}>
+        <div className="container hdr__row">
         <Logo />
         <nav className="hdr__nav">
           {NAV.map(([label, href]) => (
@@ -65,9 +68,12 @@ export function Header({ onPrice }) {
             {open ? <Icon.close /> : <Icon.menu />}
           </button>
         </div>
-      </div>
+        </div>
+      </header>
 
-      {/* Мобильное меню */}
+      {/* Мобильное меню — ВНЕ <header>: иначе backdrop-filter шапки
+          (.hdr--solid) делает её containing block для position:fixed и
+          схлопывает меню при прокрутке */}
       <div className={`mnav ${open ? "mnav--open" : ""}`}>
         <nav>
           {NAV.map(([label, href]) => (
@@ -79,7 +85,7 @@ export function Header({ onPrice }) {
           <button className="btn btn-primary btn-block" onClick={() => { setOpen(false); onPrice(); }}>Запросить прайс-лист</button>
         </div>
       </div>
-    </header>
+    </>
   );
 }
 

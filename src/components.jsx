@@ -129,10 +129,10 @@ export function LeadForm({ withConsent = true, submitLabel, onDone, compact, sou
 export function Modal({ open, onClose, children }) {
   useEffect(() => {
     if (!open) return;
-    document.body.classList.add("no-scroll");
+    document.documentElement.classList.add("no-scroll");
     const onKey = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
-    return () => { document.body.classList.remove("no-scroll"); window.removeEventListener("keydown", onKey); };
+    return () => { document.documentElement.classList.remove("no-scroll"); window.removeEventListener("keydown", onKey); };
   }, [open, onClose]);
   if (!open) return null;
   return (
