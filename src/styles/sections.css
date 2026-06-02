@@ -90,10 +90,22 @@
   flex-direction: column;
   justify-content: space-between;
   transform: translateX(100%);
-  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  opacity: 0;
   visibility: hidden;
+  /* при закрытии visibility прячется только ПОСЛЕ слайда (задержка .35s),
+     поэтому уход анимируется так же плавно, как и появление */
+  transition: transform .35s cubic-bezier(.4,0,.2,1),
+              opacity .35s ease,
+              visibility 0s linear .35s;
 }
-.mnav--open { transform: none; visibility: visible; }
+.mnav--open {
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transition: transform .35s cubic-bezier(.4,0,.2,1),
+              opacity .35s ease,
+              visibility 0s linear 0s;
+}
 .mnav nav { display: flex; flex-direction: column; }
 .mnav nav a {
   display: flex;
